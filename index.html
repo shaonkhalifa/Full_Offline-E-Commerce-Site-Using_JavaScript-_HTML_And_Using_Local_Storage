@@ -1,0 +1,607 @@
+﻿
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>MS Bazer</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    <link rel="stylesheet" href="style.css" />
+    <script src="Scripts/jquery.js"></script>
+    <script src="Scripts/jquery-3.5.1.js"></script>
+    <script src="FindUp.js"></script>
+    <!--<script src="addProduct.js"></script>-->
+    <style type="text/css">
+        .cart-popup {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            top: 30px;
+            right: 25px;
+            z-index: 9;
+            margin-bottom: 50px;
+            border-radius: 20%;
+            // height: auto;
+            height: 100%;
+           // overflow-y: scroll !important;
+        }
+
+
+        .form-container {
+            max-width: 300px;
+            padding: 30px;
+            background-color: antiquewhite;
+            box-shadow: 2px 2px 2px 2px #aaa;
+            //border: 2px solid green;
+            border-radius: 20%;
+            height: 80%;
+        }
+
+        .cart-body {
+            overflow-y: scroll;
+            height: 65%;
+            overscroll-behavior: contain;
+            background-color: white;
+        }
+
+            .cart-body::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .cart-body::-webkit-scrollbar-thumb {
+                background-color: #c1c1c1;
+            }
+
+        .cart-container {
+            border-bottom: 2px double lightgreen;
+            padding: 0;
+            margin: 0px 0px 10px 0px;
+            background-color: white;
+        }
+
+        .cartLabel {
+            display: block;
+            margin: 0px 10px 20px 10px;
+            //border: 2px solid red;
+            text-align:center;
+            justify-content:center;
+            align-items:center;
+
+        }
+
+        .product-price {
+            display: flex;
+        }
+        .ImageCart {
+            margin-top: 20px;
+            margin-left: 120px;
+        }
+        .InputCounter {
+            outline: hidden;
+            text-align: center;
+            font-weight: 700;
+            color: blue;
+            font-size: 1.5em;
+            width: 30%;
+            height: 40px;
+            border:none;
+            padding-bottom:10px;
+        }
+        .InputCounter:focus{
+            outline:none;
+        }
+        .btn-minus {
+            width: 40px;
+            background-color: red;
+            color: white;
+            height:30px;
+            font-size:1.50em;
+            font-weight:700;
+            padding:0;
+        }
+        .btn-plus {
+            width: 40px;
+            background-color: red;
+            color: white;
+            height: 30px;
+            font-size: 1.50em;
+            font-weight: 700;
+            padding: 0;
+        }
+        .unitPrice{
+            font-weight:700;
+            font-size:1.15em;
+        }
+     
+    </style>
+</head>
+    <body>
+        <div class="header" id="header">
+            <div class="header-left">
+                    <img src="Images/msk.png" style="height:100px;width:100px;"/>
+            </div>
+            <div class="header-right">
+                <div class="header-right-top">
+                    <ul>
+                        <li><a  href="#">Help</a></li>
+                        <li><a  href="#">Join Us</a></li>
+                        <li><a  href="#">Sign In</a></li>
+                    </ul>
+                </div>
+                <div class="header-right-bottom">
+                    <div class="header-right-bottom-left">
+                        <nav class="menu-navber">
+                            <div class="menu">
+                                <ul>
+                                    <li><a class="active" href="#">Home</a></li>
+                                    <li><a class="active" href="additems.html">Add new Product</a></li>
+                                    <li><a class="active" href="#">Sales</a></li>
+                                    <li><a class="active" href="#">Blog</a></li>
+                                    <li><a class="active" href="#">About Us</a></li>
+                                    <li><a class="active" href="#">Contract Us</a></li>
+    
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="header-right-bottom-right">
+                        <div class="searchbox">
+                            <form class="frm" action=" ">
+                                <input id="ibox" type="text" placeholder="Search.." onkeyup="search()" >
+                                <button  id="searchButton" onclick="search()">
+                                    <svg class="svg-icon search-icon" aria-labelledby="title desc" role="img" viewBox="0 0 19.9 19.7"><title id="title">Search Icon</title><desc id="desc">A magnifying glass icon.</desc><g class="search-path" fill="none" stroke="#848F91"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4" /><circle cx="8" cy="8" r="7" /></g></svg>
+                                </button>
+                                
+    
+                            </form>
+                    </div>
+                        <div class="cart-button">
+                            
+                                <button class="cart" onclick="openForm()" style="margin:0;top:0;">
+                                    <svg viewBox="0 0 24 24"><path d="M21.5,15a3,3,0,0,0-1.9-2.78l1.87-7a1,1,0,0,0-.18-.87A1,1,0,0,0,20.5,4H6.8L6.47,2.74A1,1,0,0,0,5.5,2h-2V4H4.73l2.48,9.26a1,1,0,0,0,1,.74H18.5a1,1,0,0,1,0,2H5.5a1,1,0,0,0,0,2H6.68a3,3,0,1,0,5.64,0h2.36a3,3,0,1,0,5.82,1,2.94,2.94,0,0,0-.4-1.47A3,3,0,0,0,21.5,15Zm-3.91-3H9L7.34,6H19.2ZM9.5,20a1,1,0,1,1,1-1A1,1,0,0,1,9.5,20Zm8,0a1,1,0,1,1,1-1A1,1,0,0,1,17.5,20Z" /></svg>
+                                </button>
+                            <span class="cart-board" style="visibility: hidden"; data-var="cartItems">0</span>
+                        </div>
+                    </div>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+        
+        <div class="body">
+            <div class="leftBody">
+                <h3>Catagory</h3>
+                <div class="navbar">
+                    <ul class="first-step-ul">
+                        <li class="first-step-ul-li">
+                            <a class="first-step-ul-li-a" href="#">Cricket</a>
+                            <ul class="second-step-ul" id="test">
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#" value="Bat" id="find" onclick="catagory()">Bat</a> </li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Ball</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Helmet</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Stumps</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Jersy</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Shoes</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Caps and Sunglass</a></li>
+                            </ul>
+                        </li>
+                        <li class="first-step-ul-li">
+                            <a class="first-step-ul-li-a" href="#">Football</a>
+                            <ul class="second-step-ul">
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Football</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Safty Gurds</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Gloves</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Jersy</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Shoes</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Jumpers</a></li>
+                            </ul>
+                        </li>
+                        <li class="first-step-ul-li">
+                            <a class="first-step-ul-li-a" href="#">Tannis</a>
+                            <ul class="second-step-ul">
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Racket</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Ball</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Net</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Tennis shoes</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Dress</a></li>
+                                <li class="second-step-ul-li"><a class="second-step-ul-li-a" href="#">Wrist bands</a></li>
+                            </ul>
+                        </li>
+                        <li class="first-step-ul-li">
+                            <a class="first-step-ul-li-a" href="#">Badminton</a>
+                        </li>
+                        <li class="first-step-ul-li">
+                            <a class="first-step-ul-li-a" href="#">Volleyball</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="space"></div>
+            <div class="rightBody" id="rightBody">
+                <div id="produtItems" class="produtItems">
+                    <div class="imgContainer ">
+                        <img class="productImg" src="Images/bat1.jpg" alt="Bat" />
+                    </div>
+                    <div class="productDetalils">
+                        <div>
+                            <h4 class="productName">Product Name:&nbsp&nbsp<a>Bat</a> </h4>
+                        </div>
+                        <p class="priceTag">
+                            <span class="productPrice ">Price:&nbsp &nbsp<a><u>8,295</u></a>  BDT</span>
+                        </p>
+                        <div class="cartBtn">
+                            <button id="addToCart">Add To Cart</button>
+                            <button id="goToCart" class="goTocart" onclick="openForm()">Go To Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="produtItems" class="produtItems">
+                    <div class="imgContainer ">
+                        <img class="productImg" src="Images/2.jpg" alt="Bat" />
+                    </div>
+                    <div class="productDetalils">
+                        <div>
+                            <h4 class="productName">Product Name:&nbsp&nbsp<a>Cricket Jersy</a> </h4>
+                        </div>
+                        <p class="priceTag">
+                            <span class="productPrice ">Price:&nbsp &nbsp<a><u>2,295</u></a>  BDT</span>
+                        </p>
+                        <div class="cartBtn">
+                            <button id="addToCart">Add To Cart</button>
+                            <button id="goToCart" class="goTocart" onclick="openForm()">Go To Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="produtItems" class="produtItems">
+                    <div class="imgContainer ">
+                        <img class="productImg" src="Images/ss1.jpg" alt="Bat" />
+                    </div>
+                    <div class="productDetalils">
+                        <div>
+                            <h4 class="productName">Product Name:&nbsp&nbsp<a>Soccer Shoes</a> </h4>
+                        </div>
+                        <p class="priceTag">
+                            <span class="productPrice ">Price:&nbsp &nbsp<a><u>22,950</u></a>  BDT</span>
+                        </p>
+                        <div class="cartBtn">
+                            <button id="addToCart">Add To Cart</button>
+                            <button id="goToCart" class="goTocart" onclick="openForm()">Go To Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="cart-popup" id="myForm">
+                <form class="form-container" action="">
+                    <h1 style="text-align:center;">My Cart</h1>
+                    <!--<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>-->
+                    <div class="cart-body">
+                        <!--<div class="cart-container">
+                            <div class="cartLabel">
+                                <img id="ImageCart" class="ImageCart" src="Images/${cursor.value.Image}" style="height:50px;width:50px;background-color:white;margin-left:40px; " alt="Bat" />
+                            </div>
+                            <div class="cartLabel">
+                                <h4 class="label" id="Product-name">Product Name : &nbsp &nbsp</h4>
+                                <div id="product-price ">
+                                    <h4 class="label" id="unitPrice">Unit Price:&nbsp &nbsp</h4>
+                                    <div class="unitPrice"><span>1 x </span><span class="amount">00</span></div>
+                                </div>
+
+                            </div>
+                            <div class="cartLabel">
+                                <button class="btn-minus">-</button>
+                                <input class="input-counter" value="0" type="text" name="" id="" readonly>
+                                <button class="btn-plus">+</button>
+                            </div>
+                            <div class="cartLabel">
+                                <button id="-btn-cancel" class="btn-cancel">Cancel</button>
+                            </div>
+                        </div>-->
+                    </div>
+                    <div class="cart-subtotal" style="padding:0;margin:0; height:40px;">
+                        <!--<span class="title"></span>-->
+                        <h3 style="top:0;"> TOTAL COST: &nbsp &nbsp<span class="totalCost" style=" ">00</span>&nbsp BDT</h3>
+                    </div>
+                    <div style="margin-top:0px;">
+                        <button class="btn" id="popBtn" onclick="payment.html"><a id="popText" href="payment.html">Checkout</a></button>
+                        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                    </div>
+
+                </form>
+            </div>
+    
+        </div>
+         <div class="footer">
+             <div class="footer-bottom-menu">
+                 <ul>
+                     <li>Guides</li>
+                     <li>Terms of Sales</li>
+                     <li>Terms of Use</li>
+                     <li>Privacy Policy</li>
+                 </ul>
+             </div>
+             <div class="copyright">
+                 <p>&copy Md.Shaon Khalifa All rights reserved.</p>
+             </div>
+         </div>
+         <script type="text/javascript">
+             // indexedDB Load
+
+
+             function RunDB() {
+
+             }
+             var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+
+             window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+             window.IDBCursor = window.IDBCursor || window.webkitIDBCursor;
+             window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange;
+
+             var db;
+             var currentEdit = null;
+
+             var openReq = indexedDB.open("DetailsDB", 1);
+
+             openReq.onsuccess = function (e) {
+                 db = e.target.result;
+             }
+
+
+            
+             var shoppingCart = (function () {
+               
+                 
+                 cart = [];
+
+                 // Constructor
+                 function Item(name, price, imagesrc, count) {
+                     this.name = name;
+                     this.price = price;
+                     this.imagesrc = imagesrc;
+                     this.count = count;
+                 }
+
+                 // Save cart
+                 function saveCart() {
+                     sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
+                 }
+
+                 // Load cart
+                 function loadCart() {
+                     cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+                 }
+                 if (sessionStorage.getItem("shoppingCart") != null) {
+                     loadCart();
+                 }
+
+
+                 /*Public methods and propeties*/
+                 
+                 var obj = {};
+
+                 // Add to cart
+                 obj.addItemToCart = function (name, price, imagesrc, count) {
+                     for (var item in cart) {
+                         if (cart[item].name === name) {
+                             cart[item].count++;
+                             saveCart();
+                             return;
+                         }
+                     }
+                     var item = new Item(name, price, imagesrc, count);
+                     cart.push(item);
+                     saveCart();
+                 }
+                 // Set count from item
+                 obj.setCountForItem = function (name, count) {
+                     for (var i in cart) {
+                         if (cart[i].name === name) {
+                             cart[i].count = count;
+                             break;
+                         }
+                     }
+                 };
+                 // Remove item from cart
+                 obj.removeItemFromCart = function (name) {
+                     for (var item in cart) {
+                         if (cart[item].name === name) {
+                             cart[item].count--;
+                             if (cart[item].count === 0) {
+                                 cart.splice(item, 1);
+                             }
+                             break;
+                         }
+                     }
+                     saveCart();
+                 }
+
+                 // Remove all items from cart
+                 obj.removeItemFromCartAll = function (name) {
+                     for (var item in cart) {
+                         if (cart[item].name === name) {
+                             cart.splice(item, 1);
+                             break;
+                         }
+                     }
+                     saveCart();
+                 }
+
+                 // Clear cart
+                 obj.clearCart = function () {
+                     cart = [];
+                     saveCart();
+                 }
+
+                 // Count cart 
+                 obj.totalCount = function () {
+                     var totalCount = 0;
+                     for (var item in cart) {
+                         totalCount += cart[item].count;
+                     }
+                     return totalCount;
+                 }
+
+                 // Total cart
+                 obj.totalCart = function () {
+                     var totalCart = 0;
+                     for (var item in cart) {
+                         totalCart += cart[item].price * cart[item].count;
+                     }
+                     return Number(totalCart.toFixed(2));
+                 }
+
+                 // List cart
+                 obj.listCart = function () {
+                     var cartCopy = [];
+                     for (i in cart) {
+                         item = cart[i];
+                         itemCopy = {};
+                         for (p in item) {
+                             itemCopy[p] = item[p];
+
+                         }
+                         itemCopy.total = Number(item.price * item.count).toFixed(2);
+                         cartCopy.push(itemCopy)
+                     }
+                     return cartCopy;
+                 }
+
+             
+                 return obj;
+             })();
+
+
+           
+             // Add item
+
+
+             $(document).on('click', '.addTocart', function (event) {
+                 event.preventDefault();
+                 var productId = $(this).data("product-id");
+
+                 var transaction = db.transaction(["Details"], "readwrite");
+                 var objStore = transaction.objectStore("Details");
+
+                 var request = objStore.get(parseInt(productId));
+
+                 request.onsuccess = function (event) {
+                     var result = request.result;
+                     var name = result.ProductName;
+                     var price = Number(result.Price);
+                     var imagesrc = result.Image;
+                     shoppingCart.addItemToCart(name, price, imagesrc, 1);
+                     displayCart();
+                 }
+               
+             });
+
+             // Clear items
+             $('.clear-cart').click(function () {
+                 shoppingCart.clearCart();
+                 displayCart();
+             });
+
+
+             function displayCart() {
+                 var cartArray = shoppingCart.listCart();
+                 var output = "";
+                 for (var i in cartArray) {
+                     output +=
+                         `<div class="cart-container">
+                            <div class="cartImage">
+                                <img id="ImageCart" class="ImageCart" src="Images/${cartArray[i].imagesrc}" style="height:50px;width:50px;background-color:white;" alt="Bat" />
+                            </div>
+                            <div class="cartLabel">
+                                <h3 class="label" id="Product-name">Product Name : &nbsp ${cartArray[i].name}</h3>
+                                <div class="unitPrice">Cost:&nbsp <span>${cartArray[i].count} &nbsp x &nbsp</span><span class="amount">${cartArray[i].price} &nbsp BDT</span></div>
+                            </div>
+                            <div class="cartLabel">
+                                <button class="btn-minus"data-name="${cartArray[i].name}">-</button>
+                                <input class="InputCounter" value="${cartArray[i].count}" type="text" name="" id="" style="outline:none;" readonly>
+                                <button class="btn-plus"data-name="${cartArray[i].name}">+</button>
+                            </div>
+                           
+                        </div>`;
+                           
+                 }
+                 $('.cart-body').html(output);
+                 $('.totalCost').html(shoppingCart.totalCart());
+                 //$("#cart-box .fa-stack[data-count]").attr('data-count', shoppingCart.totalCount());
+             }
+
+          
+             $(document).on('click', '.cartLabel .btn-minus', function (event) {
+                 var name = $(this).data('name')
+                 shoppingCart.removeItemFromCart(name);
+                 displayCart();
+             });
+
+             // +1
+             $(document).on('click', '.cartLabel .btn-plus', function (event) {
+                 var name = $(this).data('name')
+                 shoppingCart.addItemToCart(name);
+                 displayCart();
+             });
+
+             // Item count input
+             //$('.show-cart').on("change", ".item-count", function (event) {
+             //    var name = $(this).data('name');
+             //    var count = Number($(this).val());
+             //    shoppingCart.setCountForItem(name, count);
+             //    displayCart();
+             //});
+
+             displayCart();
+
+            
+             /*serch function*/
+      
+             const search = () => {
+                 const searchBox = document.getElementById("ibox").value.toUpperCase();
+                 const storeItems = document.getElementById("rightBody")
+                 const product = document.querySelectorAll(".produtItems")
+                 const pname = storeItems.getElementsByTagName("h4")
+
+                 for (var i = 0; i < pname.length; i++) {
+                     let match = product[i].getElementsByTagName('a')[0];
+                     
+    
+                     if (match) {
+                         let textvalue = match.textContent || match.innerHTML
+
+                         if (textvalue.toUpperCase().indexOf(searchBox) > -1) {
+                             product[i].style.display = "";
+                         }
+                         else {
+                             product[i].style.display = "none";
+                         }
+                     }
+                 }
+             }
+             const catagory = () => {
+                 /*const searchBox = document.getElementById("ibox").value.toUpperCase();*/
+                 var ul = document.getElementById("text")
+                 var li = ul.getElementsByTagName('li');
+                 const storeItems = document.getElementById("rightBody")
+                 const product = document.querySelectorAll(".produtItems")
+                 const pname = storeItems.getElementsByTagName("h4")
+
+                 for (var i = 0; i < pname.length; i++) {
+                     let match = product[i].getElementsByTagName('a')[0];
+
+
+                     if (match) {
+                         let textvalue = match.textContent || match.innerHTML
+
+                         if (textvalue.toUpperCase().indexOf(li) > -1) {
+                             product[i].style.display = "";
+                         }
+                         else {
+                             product[i].style.display = "none";
+                         }
+                     }
+                 }
+             }
+          
+         </script>
+    </body>
+</html>

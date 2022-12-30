@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Products</title>
+    <style type="text/css">
+        body {
+            font-family: "Century Gothic";
+            font-size: .9em;
+            background-color:lavenderblush;
+        }
+
+        #container {
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        #left {
+            width: 670px;
+            float: right;
+            right: 0;
+            padding: 5px 10px 5px 0;
+            border: 1px solid red;
+            box-shadow: 6px 5px 7px 8px grey;
+            border-radius: 10px;
+            background-color: antiquewhite;
+        }
+        h1{
+            text-align:center;
+            font-weight:700;
+        }
+        h2 {
+            text-align: center;
+            font-weight: 700;
+        }
+        #right {
+            width: 500px;
+            float: left;
+            padding-left: 10px;
+            border: 1px solid red;
+            box-shadow:6px 5px 7px 8px grey;
+            border-radius:30px;
+            background-color:antiquewhite;
+        }
+
+        .label {
+            display: block;
+            font-weight: 700;
+            margin-left: 50px;
+            height:30px;
+            font-size:1.5em;
+        }
+
+        input[type=text] {
+            border: 1px solid #ccc;
+            width:400px;
+            height:30px;
+        }
+        input{
+            margin:5px;
+            margin-left:50px;
+        }
+
+        #tbl {
+            width: 100%;
+            border: 1px solid white;
+            justify-content: center;
+            align-items: center;
+          
+        }
+
+            #tbl th {
+                border-right: 1px solid white;
+                border-bottom: 1px solid white;
+            }
+
+            #tbl td {
+                border-right: 1px solid white;
+                border-bottom: 1px solid white;
+                justify-content: center;
+                align-items: center;
+            }
+            #tbl tbody td {
+                justify-content: center;
+                align-items: center;
+                text-align:center;
+                padding-left:15px;
+            }
+
+            .edit {
+                background-color: gray;
+                color: white;
+                width:70px;
+                height:30px;
+                margin-right:2px;
+            }
+                .edit:hover {
+                    background-color: green;
+                }
+
+                .delete {
+                    background-color: gray;
+                    color: white;
+                    width: 70px;
+                    height: 30px;
+                    margin-left: 2px;
+                }
+                    .delete:hover {
+                        background-color: red;
+                    }
+            .btn{
+                height:50px;
+                width:120px;
+                text-align:center;
+                margin-left:190px;
+                margin-top:20px;
+                margin-bottom:20px;
+                border-radius:20px;
+                background-color:palevioletred;
+                color:white;
+                border:gold;
+
+            }
+                .btn:hover {
+                    background-color: red;
+                    color: white;
+                }
+    </style>
+    <script src="Scripts/jquery-3.5.1.js"></script>
+</head>
+<body>
+    <div id="container">
+        <div id="left">
+            <h2>Products Add</h2>
+            <table id="tbl" cellpadding="3" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Catagory</th>
+                        <th>Price</th>
+                        <th>Image</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="right">
+            <h1>Add New Products</h1>
+            <div>
+                <label class="label">Product Name</label>
+                <input type="text" id="pname" />
+            </div>
+            <div>
+                <label class="label">Catagory Name</label>
+                <input type="text" id="cname" />
+            </div>
+            <div>
+                <label class="label">Price</label>
+                <input type="text" id="price" />
+            </div>
+            <div>
+                <label class="label">Image</label>
+                <input type="text" id="image" />
+            </div>
+            <div>
+                <input class="btn" type="button" id="add" value="Add New" />
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+
+        window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+        window.IDBCursor = window.IDBCursor || window.webkitIDBCursor;
+        window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange;
+
+        var db;
+        var currentEdit = null;
+
+        $(document).ready(function () {
+            var openReq = indexedDB.open("DetailsDB", 1);
+            openReq.onupgradeneeded = function (e) {
+                db = e.target.result;
+
+                var store = db.createObjectStore("Details", { keyPath: "id", autoIncrement: true });
+                console.log(store);
+            }
+
+            openReq.onsuccess = function (e) {
+                db = e.target.result;
+                console.log(db);
+                readAll();
+
+                //Add Data
+                $("#add").click(function () {
+                    if ($("#pname").val() != "" && $("#cname").val() != "" && $("#price").val() != "" && $("#image").val() != "") {
+                        var tx = db.transaction(["Details"], "readwrite");
+                        if (currentEdit == null) {
+                            var store = tx.objectStore("Details");
+                            var req = store.add({
+                                ProductName: $("#pname").val(),
+                                CatagoryName: $("#cname").val(),
+                                Price: $("#price").val(),
+                                Image: $("#image").val()
+                            });
+                            req.onsuccess = function (e) {
+                                console.log("Added data...");
+                                readAll();
+                               
+                               
+                            }
+                            
+                        }
+                        else {
+                            var store = tx.objectStore("Details");
+                            var req = store.put({
+                                ProductName: $("#pname").val(),
+                                CatagoryName: $("#cname").val(),
+                                Price: $("#price").val(),
+                                Image: $("#image").val(),
+                                id: currentEdit.id
+                            });
+                            req.onsuccess = function (e) {
+                                console.log("Updated data...");
+                                readAll();
+                                
+                                
+                            }
+                        }
+                        $("#add").val("Add New");
+                        currentEdit = null;
+                        
+                    }
+                    else {
+                        alert("Please fill up the all fields!!!");
+                    }
+                });
+            }
+        });
+
+        function readAll() {
+            $("#tbl tbody").empty();
+            var tx = db.transaction(["Details"], "readonly");
+            var req = tx.objectStore("Details").openCursor();
+            req.onsuccess = function (e) {
+                var cursor = e.target.result;
+                if (!cursor) return;
+                $("#tbl tbody").append(
+                    "<tr>" +
+                    "<td>" + cursor.value.ProductName + "</td>" +
+                    "<td>" + cursor.value.CatagoryName + "</td>" +
+                    "<td>" + cursor.value.Price + "</td>" +
+                    "<td>" + cursor.value.Image + "</td>" +
+                    "<td>" + "<button type='button' class='edit' data-key='" + cursor.key + "'>Edit</button><button type = 'button' class='delete' data-key='" + cursor.key + "'>Delete</button>" + "</td>" +
+                    "</tr>"
+                )
+                cursor.continue();
+            }
+            req.onerror = function (err) {
+                console.log(err);
+            }
+            //for delete
+            tx.oncomplete = function () {
+                $(".delete").click(function () {
+                    var id = $(this).attr('data-key');
+                    var row = $(this).parent().parent();
+                    var tx = db.transaction(["Details"], "readwrite");
+                    var store = tx.objectStore("Details");
+                    var req = store.delete(parseInt(id));
+                    req.onsuccess = function (e) {
+                        console.log("Data deleted successfullly!!!!");
+                        row.remove();
+                    }
+                })
+
+                //For edit
+                $(".edit").click(function (evt) {
+                    evt.preventDefault();
+                    fillForm($(this).attr('data-key'));
+                })
+            }
+        }
+
+        function fillForm(id) {
+            var t = db.transaction(["Details"], "readwrite");
+            var objStore = t.objectStore("Details");
+            var request = objStore.get(parseInt(id));
+            request.onsuccess = function (evt) {
+                currentEdit = request.result;
+                console.log(currentEdit);
+                $("#pname").val(currentEdit.ProductName);
+                $("#cname").val(currentEdit.CatagoryName);
+                $("#price").val(currentEdit.Price);
+                $("#image").val(currentEdit.Image);
+                $("#add").val("Update");
+            }
+        }
+        function clearInput() {
+            $("#input").each(function () {
+                $(this).val('');
+            });
+        }
+    </script>
+</body>
+</html>

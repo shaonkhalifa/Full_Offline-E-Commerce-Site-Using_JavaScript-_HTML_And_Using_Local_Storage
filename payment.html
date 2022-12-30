@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delivary Information</title>
+    <style type="text/css">
+        body {
+            font-family: "Century Gothic";
+            font-size: .9em;
+            background-color: lavenderblush;
+        }
+
+        #container {
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        #from {
+            width: 93%;
+            height:auto;
+            float: right;
+            right: 0;
+            padding: 5px 10px 5px 0;
+            //border: 1px solid red;
+            box-shadow: 6px 5px 7px 8px grey;
+            border-radius: 10px;
+            background-color: antiquewhite;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 700;
+        }
+        .left {
+            width: 48%;
+            float: left;
+            padding-left: 10px;
+            //border: 1px solid red;
+            background-color: antiquewhite;
+        }
+
+        .right {
+            width: 50%;
+            float: right;
+            padding-left: 10px;
+            //border: 1px solid red;
+            background-color: antiquewhite;
+            padding-bottom:10px;
+
+        }
+
+        .label {
+            display: block;
+            font-weight: 700;
+            margin-left: 50px;
+            height: 30px;
+            font-size: 1.5em;
+        }
+
+        input[type=text] {
+            border: 1px solid #ccc;
+            width: 400px;
+            height: 30px;
+        }
+        #pNumber, #rNumber {
+            border: 1px solid #ccc;
+            width: 400px;
+            height: 30px;
+        }
+      
+
+        input {
+            margin: 5px;
+            margin-left: 50px;
+        }
+
+  
+  
+        .btn {
+            height: 50px;
+            width: 120px;
+            text-align: center;
+            margin-left: 550px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            background-color: palevioletred;
+            color: white;
+            border: gold;
+            font-size:25px;
+        }
+
+            .btn:hover {
+                background-color: red;
+                color: white;
+            }
+    </style>
+    <script src="Scripts/jquery.js"></script>
+</head>
+<body>
+    <div id="container">
+
+        <div id="from">
+            <h1>Proceed To Pay</h1>
+            <div class="left">
+                <div>
+                    <label class="label">First Name</label>
+                    <input type="text" id="fname" />
+                </div>
+                <div>
+                    <label class="label">Last Name</label>
+                    <input type="text" id="lname" />
+                </div>
+                <div>
+                    <label class="label">Phone</label>
+                    <input type="text" id="phone" />
+                </div>
+                <div>
+                    <label class="label">Email</label>
+                    <input type="text" id="email" />
+                </div>
+                <div>
+                    <label class="label">Address</label>
+                    <input type="text" id="email" />
+                </div>
+            </div>
+            <div class="right">
+                <div>
+                    <label class="label">City</label>
+                    <input type="text" id="city"  />
+                </div>
+                <div>
+                    <label class="label">Payment Method</label>
+                    <input type="radio" id="pay" name="payment" value="Cash On Delivery" checked /> Cash On Delivery
+                    <input type="radio" id="pay" name="payment" value="Card" />Card
+                    <input type="radio" id="pay" name="payment" value="Bkash" />Bkash
+                    <!--<input type="radio" id="pay" name="payment" value="Nogod" />Nogod-->
+
+                </div>
+                <div>
+                    <label class="label">Card Number</label>
+                    <input type="text" id="cNumber" />
+                </div>
+                <div>
+                    <label class="label">Pin Number</label>
+                    <input type="password" id="pNumber" />
+                </div>
+                <div>
+                    <label class="label">Rate Us</label>
+                    <input type="range" id="rNumber" min="1" max="10" />
+                </div>
+            </div>
+            <div>
+                <button class="btn" type="button" id="confirm" onclick="paid()"  >Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        function paid() {
+            let confirmAction = confirm("Are you sure ?");
+            if (confirmAction) {
+                alert("Payment successfully");
+            } else {
+                alert("Payment canceled");
+                closeWin();
+            }
+        }
+        function closeWin() {
+            myWindow.close();
+        }
+    
+
+        //$(document).ready(function () {
+
+        //    ("#confirm").click(function () {
+        //        alert("paid");
+        //    });
+
+
+        //});
+
+
+    
+    </script>
+</body>
+</html>
